@@ -13,6 +13,11 @@ venv/
 .env
 *.key
 
+# Local test configs (DO NOT COMMIT — contains auth + model paths)
+.env.local
+.env.test
+config/models.yaml
+
 # IDE
 .vscode/
 .idea/
