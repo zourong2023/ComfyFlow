@@ -23,6 +23,4 @@ venv/
 conditionings/
 *.bin
 
-# Generated
-output/
-assets/
+*.egg-info/

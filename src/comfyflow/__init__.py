@@ -14,7 +14,9 @@ from .pipeline import Pipeline
 from .agent import PromptAgent
 
 __version__ = "0.1.0"
-__all__ = ["WorkflowTemplate", "PlaceholderTemplate", "ComfyUIClient", "Pipeline", "PromptAgent"]
+# Note: adapters intentionally excluded from top-level import to keep the API clean.
+# Use: from comfyflow.adapters import ComfyUIAdapter
+__all__ = ["WorkflowTemplate", "PlaceholderTemplate", "ComfyUIClient", "Pipeline", "PromptAgent", "_llm_chat"]
 
 logger = logging.getLogger(__name__)
 
