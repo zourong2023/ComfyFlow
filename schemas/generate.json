@@ -1,11 +1,14 @@
 {
   "workflow": "generate.json",
-  "description": "Load conditioning → UNET → VAE → save image",
+  "description": "Load conditioning -> KSampler -> VAE -> SaveImage (8-node pipeline)",
   "variables": {
     "conditioning_pos_file": { "type": "string", "description": "Positive conditioning .bin filename" },
     "conditioning_neg_file": { "type": "string", "description": "Negative conditioning .bin filename" },
     "output_prefix": { "type": "string", "description": "Output image filename prefix", "default": "comfyflow" },
     "unet_name": { "type": "string", "description": "UNET model file name", "default": "unet.safetensors" },
-    "vae_name": { "type": "string", "description": "VAE model file name", "default": "vae.safetensors" }
+    "vae_name": { "type": "string", "description": "VAE model file name", "default": "vae.safetensors" },
+    "seed": { "type": "int", "description": "Random seed", "default": "{random_seed}" },
+    "steps": { "type": "int", "description": "Sampling steps", "default": 20 },
+    "cfg": { "type": "float", "description": "CFG scale", "default": 4.0 }
   }
 }

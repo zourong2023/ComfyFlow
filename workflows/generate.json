@@ -1,33 +1,24 @@
 {
-  "generate_workflow_v1": {
-    "1": {
-      "inputs": { "conditioning": "__CONDITIONING_POS_FILE__" },
-      "class_type": "LoadContditioning"
+  "1": { "inputs": { "conditioning": "__CONDITIONING_POS_FILE__" }, "class_type": "LoadContditioning" },
+  "2": { "inputs": { "conditioning": "__CONDITIONING_NEG_FILE__" }, "class_type": "LoadContditioning" },
+  "3": { "inputs": { "unet_name": "__UNET_NAME__", "weight_dtype": "default" }, "class_type": "UNETLoader" },
+  "4": { "inputs": { "vae_name": "__VAE_NAME__" }, "class_type": "VAELoader" },
+  "5": { "inputs": { "width": 1024, "height": 1024, "batch_size": 1 }, "class_type": "EmptyLatentImage" },
+  "6": {
+    "inputs": {
+      "seed": "__SEED__",
+      "steps": "__STEPS__",
+      "cfg": "__CFG__",
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": ["3", 0],
+      "positive": ["1", 0],
+      "negative": ["2", 0],
+      "latent_image": ["5", 0]
     },
-    "2": {
-      "inputs": { "conditioning": "__CONDITIONING_NEG_FILE__" },
-      "class_type": "LoadContditioning"
-    },
-    "3": {
-      "inputs": {
-        "unet_name": "__UNET_NAME__",
-        "weight_dtype": "default"
-      },
-      "class_type": "UNETLoader"
-    },
-    "4": {
-      "inputs": {
-        "samples": ["3", 0],
-        "vae_name": "__VAE_NAME__"
-      },
-      "class_type": "VAEDecode"
-    },
-    "5": {
-      "inputs": {
-        "filename_prefix": "__OUTPUT_PREFIX__",
-        "images": ["4", 0]
-      },
-      "class_type": "SaveImage"
-    }
-  }
+    "class_type": "KSampler"
+  },
+  "7": { "inputs": { "samples": ["6", 0], "vae": ["4", 0] }, "class_type": "VAEDecode" },
+  "8": { "inputs": { "filename_prefix": "__OUTPUT_PREFIX__", "images": ["7", 0] }, "class_type": "SaveImage" }
 }

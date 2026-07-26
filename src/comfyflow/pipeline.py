@@ -1,9 +1,9 @@
 """
-Pipeline — Conditioned generation pipeline (encode → generate).
+Pipeline 鈥?Conditioned generation pipeline (encode 鈫?generate).
 
 Splits generation into two steps:
-  1. Encode: CLIPTextEncode → SaveConditioning (.bin cache)
-  2. Generate: LoadConditioning → KSampler → SaveImage (no CLIP)
+  1. Encode: CLIPTextEncode 鈫?SaveConditioning (.bin cache)
+  2. Generate: LoadConditioning 鈫?KSampler 鈫?SaveImage (no CLIP)
 
 Re-use conditioning across multiple generate calls for the same prompt.
 """
@@ -26,7 +26,7 @@ _WORKFLOW_DIR = Path(__file__).resolve().parent.parent.parent / "workflows"
 
 
 class Pipeline:
-    """High-level encode → generate pipeline.
+    """High-level encode 鈫?generate pipeline.
 
     Usage:
         pipe = Pipeline(url="http://localhost:8188")
@@ -49,7 +49,7 @@ class Pipeline:
         self._conditioning_cached: bool = False
         self._last_asset_prefix: str = ""
 
-    # ── public API ──────────────────────────────────────────────
+    # 鈹€鈹€ public API 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
 
     def encode(
         self,
@@ -72,14 +72,22 @@ class Pipeline:
         ts = time.strftime("%Y%m%d_%H%M%S")
         asset_prefix = prefix or f"cf_{ts}_{prompt_hash[:8]}"
 
-        # Build workflow
+        # Build workflow with defaults for unmapped variables
+        defaults = {
+            "clip_name": "clip_model.safetensors",
+            "clip_type": "qwen_image",
+            "unet_name": "unet.safetensors",
+            "vae_name": "vae.safetensors",
+        }
+        defaults.update(extra_vars)
+
         tmpl = self._load_workflow_template("encode")
         wf = tmpl.render(
             positive_prompt=positive_prompt,
             negative_prompt=negative_prompt,
             conditioning_pos_file=f"{asset_prefix}_positive",
             conditioning_neg_file=f"{asset_prefix}_negative",
-            **extra_vars,
+            **defaults,
         )
 
         pid = self.client.submit_workflow(wf)
@@ -135,7 +143,7 @@ class Pipeline:
 
         return images
 
-    # ── helpers ─────────────────────────────────────────────────
+    # 鈹€鈹€ helpers 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
 
     def _load_workflow_template(self, stage: str) -> PlaceholderTemplate:
         """Load workflow template (prefer schema-driven, fallback to placeholder)."""

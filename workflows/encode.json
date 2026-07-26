@@ -1,24 +1,22 @@
 {
-  "encode_workflow_v1": {
-    "1": {
-      "inputs": { "clip_name": "__CLIP_NAME__", "type": "__CLIP_TYPE__", "device": "default" },
-      "class_type": "CLIPLoader"
-    },
-    "2": {
-      "inputs": { "text": "__POSITIVE_PROMPT__", "clip": ["1", 0] },
-      "class_type": "CLIPTextEncode"
-    },
-    "3": {
-      "inputs": { "text": "__NEGATIVE_PROMPT__", "clip": ["1", 0] },
-      "class_type": "CLIPTextEncode"
-    },
-    "4": {
-      "inputs": { "filename": "__CONDITIONING_POS_FILE__", "conditionings": ["2", 0] },
-      "class_type": "SaveConditioning"
-    },
-    "5": {
-      "inputs": { "filename": "__CONDITIONING_NEG_FILE__", "conditionings": ["3", 0] },
-      "class_type": "SaveConditioning"
-    }
+  "1": {
+    "inputs": { "clip_name": "__CLIP_NAME__", "type": "__CLIP_TYPE__", "device": "default" },
+    "class_type": "CLIPLoader"
+  },
+  "2": {
+    "inputs": { "text": "__POSITIVE_PROMPT__", "clip": ["1", 0] },
+    "class_type": "CLIPTextEncode"
+  },
+  "3": {
+    "inputs": { "text": "__NEGATIVE_PROMPT__", "clip": ["1", 0] },
+    "class_type": "CLIPTextEncode"
+  },
+  "4": {
+    "inputs": { "filename": "__CONDITIONING_POS_FILE__", "conditionings": ["2", 0] },
+    "class_type": "SaveConditioning"
+  },
+  "5": {
+    "inputs": { "filename": "__CONDITIONING_NEG_FILE__", "conditionings": ["3", 0] },
+    "class_type": "SaveConditioning"
   }
 }
