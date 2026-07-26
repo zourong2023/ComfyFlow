@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  comfyflow-panel:
+    build: .
+    ports:
+      - "8500:8500"
+    environment:
+      - COMFYUI_URL=${COMFYUI_URL:-http://comfyui:8188}
+    depends_on:
+      comfyui:
+        condition: service_healthy
+    volumes:
+      - ./config:/app/config
+      - ./workflows:/app/workflows
+      - ./output:/app/output
+
+  comfyui:
+    image: comfyanonymous/comfyui:latest
+    ports:
+      - "8188:8188"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - comfyui-models:/app/models
+      - comfyui-custom-nodes:/app/custom_nodes
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8188/system_stats"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  comfyui-models:
+  comfyui-custom-nodes:

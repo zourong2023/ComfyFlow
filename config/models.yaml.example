@@ -1,0 +1,26 @@
+# ComfyFlow — Model Configuration Example
+# Copy to models.yaml and edit for your setup.
+# This is the mapping between model groups and your actual model files.
+
+models:
+  clip:
+    name: "your-clip-model.safetensors"
+    type: "qwen_image"
+  unet:
+    name: "your-unet-model.safetensors"
+  vae:
+    name: "your-vae-model.safetensors"
+  loras:
+    - name: "lightning-lora.safetensors"
+      strength: 1.0
+    - name: "style-lora.safetensors"
+      strength: 0.6
+
+turbo_mode:
+  enabled: true
+  steps: 4
+  cfg: 1.0
+
+quality_mode:
+  steps: 50
+  cfg: 4.0

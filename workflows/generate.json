@@ -1,0 +1,33 @@
+{
+  "generate_workflow_v1": {
+    "1": {
+      "inputs": { "conditioning": "__CONDITIONING_POS_FILE__" },
+      "class_type": "LoadContditioning"
+    },
+    "2": {
+      "inputs": { "conditioning": "__CONDITIONING_NEG_FILE__" },
+      "class_type": "LoadContditioning"
+    },
+    "3": {
+      "inputs": {
+        "unet_name": "__UNET_NAME__",
+        "weight_dtype": "default"
+      },
+      "class_type": "UNETLoader"
+    },
+    "4": {
+      "inputs": {
+        "samples": ["3", 0],
+        "vae_name": "__VAE_NAME__"
+      },
+      "class_type": "VAEDecode"
+    },
+    "5": {
+      "inputs": {
+        "filename_prefix": "__OUTPUT_PREFIX__",
+        "images": ["4", 0]
+      },
+      "class_type": "SaveImage"
+    }
+  }
+}

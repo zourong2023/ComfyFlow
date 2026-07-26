@@ -1,0 +1,12 @@
+{
+  "workflow": "encode.json",
+  "description": "CLIP text encode → save conditioning .bin files",
+  "variables": {
+    "positive_prompt": { "type": "string", "description": "Positive prompt text" },
+    "negative_prompt": { "type": "string", "description": "Negative prompt text", "default": "" },
+    "conditioning_pos_file": { "type": "string", "description": "Filename prefix for positive conditioning" },
+    "conditioning_neg_file": { "type": "string", "description": "Filename prefix for negative conditioning" },
+    "clip_name": { "type": "string", "description": "CLIP model file name", "default": "clip_model.safetensors" },
+    "clip_type": { "type": "string", "description": "CLIP model type (qwen_image / sd3 / flux)", "default": "qwen_image" }
+  }
+}
