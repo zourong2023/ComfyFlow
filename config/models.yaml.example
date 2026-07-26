@@ -1,20 +1,29 @@
 # ComfyFlow — Model Configuration Example
 # Copy to models.yaml and edit for your setup.
-# This is the mapping between model groups and your actual model files.
+
+# ── Quick Start ──
+# 1. Fill in your actual model file names below
+# 2. Run: python -m comfyflow.panel
+# 3. Open http://localhost:8500
 
 models:
-  clip:
-    name: "your-clip-model.safetensors"
-    type: "qwen_image"
-  unet:
-    name: "your-unet-model.safetensors"
-  vae:
-    name: "your-vae-model.safetensors"
-  loras:
-    - name: "lightning-lora.safetensors"
-      strength: 1.0
-    - name: "style-lora.safetensors"
-      strength: 0.6
+  # Qwen-Image pipeline (Chinese natural language prompts)
+  qwen:
+    type: qwen_image
+    clip_name: "your-clip-model.safetensors"
+    clip_type: "qwen_image"
+    unet_name: "your-unet-model.safetensors"
+    vae_name: "your-vae-model.safetensors"
+    loras:
+      - "lightning-lora.safetensors"
+
+  # SDXL pipeline (English tag prompts)
+  sdxl:
+    type: sdxl
+    ckpt: "your-sdxl-checkpoint.safetensors"
+    vae: "sdxl_vae.safetensors"
+    loras:
+      - "style-lora.safetensors"
 
 turbo_mode:
   enabled: true
