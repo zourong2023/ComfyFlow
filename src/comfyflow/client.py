@@ -99,6 +99,13 @@ class ComfyUIClient:
         except Exception:
             return False
 
+    def get_system_stats(self) -> dict:
+        """Return full ComfyUI system stats (version, devices, etc.)."""
+        try:
+            return self._request("GET", "/system_stats")
+        except Exception as e:
+            return {"error": str(e)}
+
     # ── internal ────────────────────────────────────────────────
 
     def _headers(self) -> dict:
