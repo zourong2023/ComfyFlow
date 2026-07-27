@@ -24,6 +24,18 @@ logger = logging.getLogger(__name__)
 
 _WORKFLOW_DIR = Path(__file__).resolve().parent.parent.parent / "workflows"
 
+# ── 分辨率映射表 ───────────────────────────────────────────
+_ASPECT_RATIOS: dict[str, tuple[int, int]] = {
+    "1:1": (1024, 1024),
+    "4:3": (1152, 896),
+    "3:2": (1216, 832),
+    "16:9": (1344, 768),
+    "21:9": (1536, 640),
+    "9:16": (768, 1344),
+    "2:3": (832, 1216),
+    "3:4": (896, 1152),
+}
+
 
 class Pipeline:
     """High-level encode 鈫?generate pipeline.
@@ -50,6 +62,14 @@ class Pipeline:
         self._last_asset_prefix: str = ""
 
     # 鈹€鈹€ public API 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+
+    def _resolve_resolution(self, width: int | None, height: int | None, aspect_ratio: str | None) -> list[int]:
+        """Return [width, height] from explicit values or aspect_ratio string."""
+        if width and height:
+            return [width, height]
+        if aspect_ratio and aspect_ratio in _ASPECT_RATIOS:
+            return list(_ASPECT_RATIOS[aspect_ratio])
+        return [1024, 1024]
 
     def encode(
         self,
