@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.1] — 2026-07-28
+
+### Added
+- scripts/setup-ssh-server.ps1: Windows OpenSSH 公网加固配置脚本 (端口/账户/禁密码参数化, DefaultShell 自动检测 PS7)
+- docs/ssh-setup-guide.md: 跨公网 SSH 免密配置 + ComfyUI 模型同步指南 (脱敏通用版)
+
 ## [0.2.0] — 2026-07-27
 
 ### Fixed
