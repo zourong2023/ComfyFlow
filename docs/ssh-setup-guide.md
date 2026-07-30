@@ -107,3 +107,41 @@ Test-NetConnection -ComputerName <WORKSTATION_IP> -Port 22
 # 看 sshd 日志
 Get-WinEvent -LogName 'OpenSSH/Operational' -MaxEvents 20
 ```
+
+## 进阶：VS Code Remote SSH（推荐远程开发方式）
+
+VS Code Remote SSH 通过 VS Code Server 在工作站上运行终端，其进程不受 SSH session 生命周期限制。这是唯一能从远程直接启动持久后台进程的方式。
+
+```bash
+# 笔记本 → 工作站 VS Code 远程窗口
+code --remote ssh-remote+<ALIAS> /path/to/ComfyUI
+```
+
+**与纯 SSH 的区别**：
+
+| 操作 | 纯 SSH 终端 | VS Code Remote 终端 |
+|------|------------|-------------------|
+| 启动持久进程 | 进程随会话断开被 kill | 进程由 VS Code Server 托管，持久存活 |
+| SCP 传文件 | 正常 | 仍需 ssh/scp 命令 |
+| 适用场景 | 紧急查看状态、传文件 | 日常开发、模型管理、持久后台服务 |
+
+## 进阶：LLM 模型加载 (llama-server)
+
+工作站可运行 llama-server 提供 OpenAI 兼容 API，用于智能提示增强或自动化。
+
+**方式 A：VS Code Remote 终端（推荐）** — 进程持久加载
+
+```bash
+python scripts/llm_manager.py load 35b
+python scripts/llm_manager.py status
+```
+
+**方式 B：LM Studio GUI（最稳定）** — 可视化加载
+
+1. 打开 LM Studio → 选择模型 → 启动 Server（端口 1234）
+2. 框架自动代理 `/v1` 路由到 LLM API
+
+**检测机制**：llm_manager 自动识别三环境：
+- `TERM_PROGRAM=vscode` → 直接启动（进程持久）
+- `SSH_CLIENT/SSH_TTY` → 生成 `.bat`（双击运行）
+- 本地终端 → 直接启动
